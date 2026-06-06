@@ -9,6 +9,7 @@ function mapShipment(row: any, timeline: any[], payments: any[], photos: any[]):
     id: row.id,
     trackingCode: row.tracking_code,
     status: row.status,
+    currency: row.currency || 'USD',
     senderName: row.sender_name,
     senderAddress: row.sender_address || '',
     senderCountry: row.sender_country,
@@ -183,6 +184,7 @@ export function useCreateShipment() {
           transport_mode: data.transportMode,
           estimated_delivery: data.estimatedDelivery,
           shipping_fee: data.shippingFee,
+          currency: data.currency,
           ...(originCoords ? {
             current_lat: originCoords.lat,
             current_lng: originCoords.lng,
@@ -215,6 +217,7 @@ export function useCreateShipment() {
             transportMode: data.transportMode,
             estimatedDelivery: data.estimatedDelivery,
             shippingFee: data.shippingFee,
+            currency: data.currency,
           },
         }).catch(err => console.error('Email notification failed:', err));
       }
