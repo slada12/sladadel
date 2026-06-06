@@ -11,7 +11,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useAuth } from '@/context/AuthContext';
 import { useShipmentsList, useCreateShipment } from '@/hooks/useShipments';
-import { COUNTRIES, TRANSPORT_MODES, STATUS_CONFIG } from '@/types/shipment';
+import { COUNTRIES, TRANSPORT_MODES, STATUS_CONFIG, CURRENCIES } from '@/types/shipment';
 import type { TransportMode } from '@/types/shipment';
 import { toast } from 'sonner';
 
@@ -41,9 +41,10 @@ export default function AdminDashboard() {
       transportMode: fd.get('transportMode') as TransportMode,
       estimatedDelivery: fd.get('estimatedDelivery') as string,
       shippingFee: parseFloat(fd.get('shippingFee') as string),
+      currency: fd.get('currency') as string,
     };
 
-    if (!data.senderName || !data.receiverName || !data.transportMode || !data.estimatedDelivery || !data.shippingFee) {
+    if (!data.senderName || !data.receiverName || !data.transportMode || !data.estimatedDelivery || !data.shippingFee || !data.currency) {
       toast.error('Please fill all required fields');
       return;
     }
@@ -129,10 +130,39 @@ export default function AdminDashboard() {
                   </SelectContent>
                 </Select>
               </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div><Label>Est. Delivery *</Label><Input type="date" name="estimatedDelivery" required /></div>
-                <div><Label>Shipping Fee ($) *</Label><Input type="number" name="shippingFee" step="0.01" min="0" required /></div>
-              </div>
+              <div className="grid grid-cols-3 gap-3">
+  <div>
+    <Label>Est. Delivery *</Label>
+    <Input type="date" name="estimatedDelivery" required />
+  </div>
+
+  <div>
+    <Label>Currency *</Label>
+    <Select name="currency" required>
+      <SelectTrigger>
+        <SelectValue placeholder="Currency" />
+      </SelectTrigger>
+      <SelectContent>
+        {Object.entries(CURRENCIES).map(([code, currency]) => (
+          <SelectItem key={code} value={code}>
+            {code} ({currency.symbol})
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  </div>
+
+  <div>
+    <Label>Shipping Fee *</Label>
+    <Input
+      type="number"
+      name="shippingFee"
+      step="0.01"
+      min="0"
+      required
+    />
+  </div>
+</div>
               <Button type="submit" variant="accent" className="w-full" disabled={createShipment.isPending}>
                 {createShipment.isPending ? 'Creating...' : 'Create Shipment'}
               </Button>
