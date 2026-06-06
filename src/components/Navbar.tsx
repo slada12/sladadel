@@ -13,7 +13,7 @@ export function Navbar() {
       <div className="container flex h-16 items-center justify-between">
         <Link to="/" className="flex items-center gap-2 font-bold text-xl text-foreground">
           <Package className="h-6 w-6 text-accent" />
-          <span>slad<span className="text-accent">alogi.site</span></span>>
+          <span>slad<span className="text-accent">alogi.site</span></span>
         </Link>
         <nav className="flex items-center gap-2">
           {isAdmin && isAdminRoute ? (
